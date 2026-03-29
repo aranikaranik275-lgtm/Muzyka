@@ -1,0 +1,71 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate PWA icons
+        run: |
+          npm install canvas
+          node generate-icons.js
+        continue-on-error: true
+
+      - name: Create fallback icons if generation failed
+        run: |
+          mkdir -p icons
+          if [ ! -f icons/icon-192.png ]; then
+            python3 -c "
+          import struct, zlib
+          def make_png(w, h, color):
+              def chunk(name, data):
+                  c = struct.pack('>I', len(data)) + name + data
+                  return c + struct.pack('>I', zlib.crc32(name+data) & 0xffffffff)
+              sig = b'\\x89PNG\\r\\n\\x1a\\n'
+              ihdr = chunk(b'IHDR', struct.pack('>IIBBBBB', w, h, 8, 2, 0, 0, 0))
+              raw = b''
+              for _ in range(h):
+                  raw += b'\\x00' + bytes(color) * w
+              idat = chunk(b'IDAT', zlib.compress(raw))
+              iend = chunk(b'IEND', b'')
+              return sig + ihdr + idat + iend
+          img = make_png(192, 192, [26, 26, 46])
+          open('icons/icon-192.png','wb').write(img)
+          img = make_png(512, 512, [26, 26, 46])
+          open('icons/icon-512.png','wb').write(img)
+          "
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
