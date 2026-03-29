@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1a1a2e" />
+  <meta name="description" content="Muzyka – Twoja aplikacja muzyczna" />
+  <title>Muzyka</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Auth screen -->
+  <div id="auth-screen" class="screen active">
+    <div class="auth-container">
+      <div class="app-logo">
+        <svg viewBox="0 0 64 64" width="80" height="80">
+          <circle cx="32" cy="32" r="32" fill="#e94560"/>
+          <path d="M24 20v18.4a6 6 0 1 0 4 0V26h10v-6H24z" fill="white"/>
+        </svg>
+      </div>
+      <h1>Muzyka</h1>
+      <p>Twoja personalna aplikacja muzyczna</p>
+      <button id="google-signin-btn" class="btn btn-primary">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="white" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="white" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="white" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="white" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Zaloguj się przez Google
+      </button>
+    </div>
+  </div>
+
+  <!-- Main app -->
+  <div id="app-screen" class="screen">
+    <!-- Top bar -->
+    <header class="top-bar">
+      <button class="icon-btn" id="menu-btn" aria-label="Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
+      </button>
+      <h1 class="app-title">Muzyka</h1>
+      <div class="user-avatar-wrap">
+        <img id="user-avatar" src="" alt="" class="user-avatar" />
+      </div>
+    </header>
+
+    <!-- Navigation tabs -->
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="discover">
+        <svg width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+        <span>Odkryj</span>
+      </button>
+      <button class="nav-tab" data-tab="search">
+        <svg width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <span>Szukaj</span>
+      </button>
+      <button class="nav-tab" data-tab="library">
+        <svg width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 8h-3v3h-2v-3H10V8h3V5h2v3h3v2z"/></svg>
+        <span>Biblioteka</span>
+      </button>
+      <button class="nav-tab" data-tab="settings">
+        <svg width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        <span>Ustawienia</span>
+      </button>
+    </nav>
+
+    <!-- Tab content -->
+    <main class="tab-content">
+
+      <!-- Discover tab -->
+      <section id="tab-discover" class="tab-panel active">
+        <div id="swipe-container">
+          <div id="swipe-card" class="swipe-card">
+            <div class="card-thumbnail-wrap">
+              <div id="player-container">
+                <div id="yt-player"></div>
+              </div>
+              <div class="card-overlay">
+                <div class="card-info">
+                  <h2 id="card-title">Ładowanie...</h2>
+                  <p id="card-artist"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="swipe-hint" class="swipe-hint">
+            <span class="hint-reject">✕ Odrzuć</span>
+            <span class="hint-accept">❤️ Polub</span>
+          </div>
+          <div class="swipe-actions">
+            <button id="reject-btn" class="action-btn reject-btn" aria-label="Odrzuć">✕</button>
+            <button id="replay-btn" class="action-btn replay-btn" aria-label="Odtwórz od nowa">↺</button>
+            <button id="like-btn" class="action-btn like-btn" aria-label="Polub">❤️</button>
+          </div>
+        </div>
+        <div id="discover-empty" class="empty-state hidden">
+          <p>Brak rekomendacji.<br>Wyszukaj muzykę i polub coś!</p>
+          <button class="btn btn-primary" data-tab-switch="search">Szukaj</button>
+        </div>
+      </section>
+
+      <!-- Search tab -->
+      <section id="tab-search" class="tab-panel">
+        <div class="search-bar">
+          <input type="text" id="search-input" placeholder="Szukaj muzyki na YouTube..." autocomplete="off" />
+          <button id="search-btn" class="btn btn-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          </button>
+        </div>
+        <div id="search-results" class="results-list"></div>
+        <div id="search-empty" class="empty-state">
+          <svg width="64" height="64" viewBox="0 0 24 24" opacity="0.3"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <p>Wpisz tytuł lub wykonawcę</p>
+        </div>
+      </section>
+
+      <!-- Library tab -->
+      <section id="tab-library" class="tab-panel">
+        <div class="library-tabs">
+          <button class="lib-tab active" data-lib="liked">❤️ Polubione</button>
+          <button class="lib-tab" data-lib="playlists">📋 Playlisty</button>
+          <button class="lib-tab" data-lib="history">🕐 Historia</button>
+        </div>
+
+        <!-- Liked -->
+        <div id="lib-liked" class="lib-panel active">
+          <div id="liked-list" class="results-list"></div>
+          <div id="liked-empty" class="empty-state hidden">
+            <p>Brak polubionych utworów</p>
+          </div>
+        </div>
+
+        <!-- Playlists -->
+        <div id="lib-playlists" class="lib-panel">
+          <div class="playlist-header">
+            <button id="create-playlist-btn" class="btn btn-primary btn-sm">+ Nowa playlista</button>
+          </div>
+          <div id="playlists-list" class="results-list"></div>
+          <div id="playlists-empty" class="empty-state hidden">
+            <p>Brak playlist</p>
+          </div>
+        </div>
+
+        <!-- History -->
+        <div id="lib-history" class="lib-panel">
+          <div id="history-list" class="results-list"></div>
+          <div id="history-empty" class="empty-state hidden">
+            <p>Brak historii</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings tab -->
+      <section id="tab-settings" class="tab-panel">
+        <div class="settings-container">
+          <h2>Ustawienia</h2>
+
+          <div class="settings-section">
+            <h3>Klucze API</h3>
+            <div class="form-group">
+              <label for="yt-api-key">Klucz YouTube Data API v3</label>
+              <input type="password" id="yt-api-key" placeholder="AIza..." />
+              <small>Uzyskaj klucz w <a href="https://console.developers.google.com" target="_blank" rel="noopener">Google Cloud Console</a></small>
+            </div>
+            <div class="form-group">
+              <label for="lastfm-api-key">Klucz Last.fm API</label>
+              <input type="password" id="lastfm-api-key" placeholder="Klucz API Last.fm" />
+              <small>Uzyskaj klucz na <a href="https://www.last.fm/api/account/create" target="_blank" rel="noopener">last.fm/api</a></small>
+            </div>
+            <button id="save-keys-btn" class="btn btn-primary">Zapisz klucze</button>
+          </div>
+
+          <div class="settings-section">
+            <h3>Konto</h3>
+            <div class="user-info">
+              <img id="settings-avatar" src="" alt="" class="user-avatar-lg" />
+              <div>
+                <p id="settings-name" class="user-name"></p>
+                <p id="settings-email" class="user-email"></p>
+              </div>
+            </div>
+            <button id="signout-btn" class="btn btn-secondary">Wyloguj się</button>
+          </div>
+
+          <div class="settings-section">
+            <h3>Dane</h3>
+            <button id="clear-rejected-btn" class="btn btn-secondary">Wyczyść odrzucone utwory</button>
+            <button id="clear-history-btn" class="btn btn-secondary">Wyczyść historię</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Mini player -->
+    <div id="mini-player" class="mini-player hidden">
+      <img id="mini-thumb" src="" alt="" />
+      <div class="mini-info">
+        <span id="mini-title"></span>
+        <span id="mini-artist"></span>
+      </div>
+      <button id="mini-play-btn" class="icon-btn">▶</button>
+      <button id="mini-close-btn" class="icon-btn">✕</button>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div id="modal" class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title"></h3>
+        <button id="modal-close" class="icon-btn">✕</button>
+      </div>
+      <div id="modal-body" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Toast notifications -->
+  <div id="toast-container"></div>
+
+  <!-- Loading overlay -->
+  <div id="loading" class="loading-overlay hidden">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
