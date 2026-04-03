@@ -43,7 +43,7 @@ self.addEventListener('fetch', e => {
     url.hostname.includes('ytimg.com') ||
     e.request.method !== 'GET'
   ) {
-    e.respondWith(fetch(e.request));
+    e.respondWith(fetch(e.request).catch(() => new Response('', { status: 503, statusText: 'Service Unavailable' })));
     return;
   }
 

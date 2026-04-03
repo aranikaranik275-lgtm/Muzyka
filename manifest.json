@@ -2,8 +2,8 @@
   "name": "Muzyka",
   "short_name": "Muzyka",
   "description": "Twoja personalna aplikacja muzyczna z YouTube i Last.fm",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "./",
+  "scope": ".",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0f0f1a",
@@ -28,12 +28,12 @@
   "shortcuts": [
     {
       "name": "Odkryj muzykę",
-      "url": "/?tab=discover",
+      "url": "./?tab=discover",
       "description": "Odkryj nową muzykę"
     },
     {
       "name": "Biblioteka",
-      "url": "/?tab=library",
+      "url": "./?tab=library",
       "description": "Twoja biblioteka muzyczna"
     }
   ]
