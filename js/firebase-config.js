@@ -1,5 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect,
+  getRedirectResult, signOut, onAuthStateChanged }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, updateDoc, deleteDoc,
   getDocs, query, where, orderBy, limit, serverTimestamp, arrayUnion, arrayRemove }
@@ -20,7 +21,7 @@ export const db = getFirestore(app);
 export const googleProvider = new GoogleAuthProvider();
 
 export {
-  signInWithPopup, signOut, onAuthStateChanged,
+  signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged,
   doc, setDoc, getDoc, collection, addDoc, updateDoc, deleteDoc,
   getDocs, query, where, orderBy, limit, serverTimestamp, arrayUnion, arrayRemove
 };

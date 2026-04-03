@@ -2,7 +2,8 @@
  * Main application entry point
  */
 import './config.js';
-import { auth, googleProvider, signInWithPopup, signOut, onAuthStateChanged }
+import { auth, googleProvider, signInWithPopup, signInWithRedirect,
+  getRedirectResult, signOut, onAuthStateChanged }
   from './firebase-config.js';
 import { Settings } from './settings.js';
 import { showToast } from './toast.js';
@@ -32,11 +33,20 @@ const authScreen = $('auth-screen');
 const appScreen = $('app-screen');
 
 // ===== AUTH =====
+// Handle redirect result on page load (mobile browsers convert popup → redirect)
+showLoading(true);
+getRedirectResult(auth).catch(() => {}).finally(() => showLoading(false));
+
 $('google-signin-btn').addEventListener('click', async () => {
   try {
     showLoading(true);
     await signInWithPopup(auth, googleProvider);
   } catch (e) {
+    // Popup blocked (common on mobile) — fall back to redirect flow
+    if (e.code === 'auth/popup-blocked' || e.code === 'auth/cancelled-popup-request') {
+      await signInWithRedirect(auth, googleProvider);
+      return; // page will reload after Google auth
+    }
     showToast('Błąd logowania: ' + e.message, 'error');
   } finally {
     showLoading(false);
