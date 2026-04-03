@@ -35,7 +35,13 @@ const appScreen = $('app-screen');
 // ===== AUTH =====
 // Handle redirect result on page load (mobile browsers convert popup → redirect)
 showLoading(true);
-getRedirectResult(auth).catch(() => {}).finally(() => showLoading(false));
+getRedirectResult(auth)
+  .catch(e => {
+    if (e && e.code && e.code !== 'auth/no-auth-event') {
+      showToast('Błąd logowania: ' + e.code, 'error', 6000);
+    }
+  })
+  .finally(() => showLoading(false));
 
 $('google-signin-btn').addEventListener('click', async () => {
   try {
@@ -47,7 +53,7 @@ $('google-signin-btn').addEventListener('click', async () => {
       await signInWithRedirect(auth, googleProvider);
       return; // page will reload after Google auth
     }
-    showToast('Błąd logowania: ' + e.message, 'error');
+    showToast('Błąd logowania: ' + e.code, 'error', 6000);
   } finally {
     showLoading(false);
   }
