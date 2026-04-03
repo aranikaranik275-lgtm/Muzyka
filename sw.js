@@ -4,6 +4,7 @@ const STATIC = [
   '/index.html',
   '/css/styles.css',
   '/js/app.js',
+  '/js/config.js',
   '/js/firebase-config.js',
   '/js/youtube.js',
   '/js/lastfm.js',
@@ -43,7 +44,7 @@ self.addEventListener('fetch', e => {
     url.hostname.includes('ytimg.com') ||
     e.request.method !== 'GET'
   ) {
-    e.respondWith(fetch(e.request));
+    e.respondWith(fetch(e.request).catch(() => new Response('', { status: 503, statusText: 'Service Unavailable' })));
     return;
   }
 

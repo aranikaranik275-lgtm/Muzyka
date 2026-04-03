@@ -1,7 +1,9 @@
 /**
  * Main application entry point
  */
-import { auth, googleProvider, signInWithPopup, signOut, onAuthStateChanged }
+import './config.js';
+import { auth, googleProvider, signInWithPopup, signInWithRedirect,
+  getRedirectResult, signOut, onAuthStateChanged }
   from './firebase-config.js';
 import { Settings } from './settings.js';
 import { showToast } from './toast.js';
@@ -31,11 +33,20 @@ const authScreen = $('auth-screen');
 const appScreen = $('app-screen');
 
 // ===== AUTH =====
+// Handle redirect result on page load (mobile browsers convert popup → redirect)
+showLoading(true);
+getRedirectResult(auth).catch(() => {}).finally(() => showLoading(false));
+
 $('google-signin-btn').addEventListener('click', async () => {
   try {
     showLoading(true);
     await signInWithPopup(auth, googleProvider);
   } catch (e) {
+    // Popup blocked (common on mobile) — fall back to redirect flow
+    if (e.code === 'auth/popup-blocked' || e.code === 'auth/cancelled-popup-request') {
+      await signInWithRedirect(auth, googleProvider);
+      return; // page will reload after Google auth
+    }
     showToast('Błąd logowania: ' + e.message, 'error');
   } finally {
     showLoading(false);
@@ -46,7 +57,7 @@ onAuthStateChanged(auth, async user => {
   currentUser = user;
   if (user) {
     setUid(user.uid);
-    await loadRejectedFromFirestore();
+    await loadRejectedFromFirestore().catch(() => {});
     showApp(user);
     initYouTubePlayer(() => loadDiscover());
   } else {
@@ -112,7 +123,11 @@ async function loadDiscover() {
   // Fallback: load from YouTube search with generic query
   if (tracks.length === 0) {
     if (!Settings.getYtKey()) {
-      $('discover-empty').classList.remove('hidden');
+      const emptyEl = $('discover-empty');
+      emptyEl.querySelector('p').innerHTML = 'Dodaj klucze API w <strong>Ustawieniach</strong>,<br>aby zacząć odkrywać muzykę!';
+      const btn = emptyEl.querySelector('[data-tab-switch]');
+      if (btn) { btn.dataset.tabSwitch = 'settings'; btn.textContent = 'Idź do Ustawień'; }
+      emptyEl.classList.remove('hidden');
       $('swipe-container').style.display = 'none';
       return;
     }
@@ -168,11 +183,12 @@ async function showNextCard() {
   }
 
   currentTrack = track;
-  $('card-title').textContent = track.title || track.title;
+  $('card-title').textContent = track.title || '';
   $('card-artist').textContent = track.artist || '';
 
   playVideo(track.videoId);
   addToHistory(track).catch(() => {});
+  updateMiniPlayer(track);
 
   // Re-init swipe on the card element
   const card = $('swipe-card');
@@ -284,7 +300,7 @@ document.querySelectorAll('.lib-tab').forEach(btn => {
 });
 
 async function loadLibraryTab() {
-  loadLibPanel(currentLibTab);
+  await loadLibPanel(currentLibTab);
 }
 
 async function loadLibPanel(panel) {
@@ -615,5 +631,5 @@ function esc(str) {
 
 // ===== SERVICE WORKER =====
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {});
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
