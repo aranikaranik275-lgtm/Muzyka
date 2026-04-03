@@ -1,6 +1,7 @@
 /**
  * Main application entry point
  */
+import './config.js';
 import { auth, googleProvider, signInWithPopup, signOut, onAuthStateChanged }
   from './firebase-config.js';
 import { Settings } from './settings.js';

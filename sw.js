@@ -4,6 +4,7 @@ const STATIC = [
   '/index.html',
   '/css/styles.css',
   '/js/app.js',
+  '/js/config.js',
   '/js/firebase-config.js',
   '/js/youtube.js',
   '/js/lastfm.js',
